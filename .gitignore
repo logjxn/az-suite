@@ -1,0 +1,18 @@
+# Python (P4)
+.venv/
+__pycache__/
+*.pyc
+
+# Secrets, never commit
+.env
+*.env
+
+# Unredacted script output (P4)
+output/raw/
+
+# Windows clutter
+Thumbs.db
+desktop.ini
+
+# Editor settings
+.vscode/
