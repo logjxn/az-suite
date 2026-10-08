@@ -69,4 +69,5 @@ Set-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\Wi
 
 **Verified after a reboot:** `HypervisorPresent` False, scenario still `0`, dreaded turtle gone.
 
-**Tradeoff:** Hello keys are still TPM-protected but no longer VBS-isolated. This is temporary. 
+**Lesson Learned**: Learned about SkTool and how I should've ran it first. Was guessing until I did, and it 
+directed me to exactly what I needed to do.
