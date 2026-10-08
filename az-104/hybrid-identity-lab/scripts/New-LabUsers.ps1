@@ -39,20 +39,25 @@ foreach ($ou in $OUs) {
 
 # Users
 $Users = @(
-    @{ Given = 'Jane';   Sur = 'Doe';  Sam = 'jdoe' }
-    @{ Given = 'Lee'; Sur = 'Gu'; Sam = 'lgu' }
-    @{ Given = 'Goku';  Sur = 'Kakarot'; Sam = 'gkakarot' }
-    @{ Given = 'SOA';    Sur = 'Test'; Sam = 'soa.test' }   # throwaway for later lab step
+    @{ Given = 'Jane'; Sur = 'Doe';     Sam = 'jdoe' }
+    @{ Given = 'Lee';  Sur = 'Gu';      Sam = 'lgu' }
+    @{ Given = 'Goku'; Sur = 'Kakarot'; Sam = 'gkakarot' }
+    @{ Given = 'SOA';  Sur = 'Test';    Sam = 'soa.test' }   # throwaway for later lab step
 )
 
 foreach ($u in $Users) {
-    $sam = $u.Sam
-    if (Get-ADUser -Filter "SamAccountName -eq '$sam'") {
-        Write-Host "skip  user   $sam"
-        continue
+    $sam      = $u.Sam
+    $fullName = "$($u.Given) $($u.Sur)"
+
+    $existing = Get-ADUser -Filter "SamAccountName -eq '$sam' -or Name -eq '$fullName'"
+    if ($existing) {
+        if ($existing.SamAccountName -eq $sam) {
+            Write-Host "skip  user   $sam"
+            continue
+        }
+        throw "Name '$fullName' is already used by '$($existing.SamAccountName)'. Fix the user list or remove that account."
     }
 
-    $fullName = "$($u.Given) $($u.Sur)"
     $userParams = @{
         Name                  = $fullName
         GivenName             = $u.Given
