@@ -68,6 +68,8 @@ Set-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\Wi
 
 **Verified after a reboot:** `HypervisorPresent` False, scenario still `0`, dreaded turtle gone.
 
+**Tradeoff:** Hello keys are still TPM-protected but no longer VBS-isolated. Temporary just for the lab.
+
 ## 2026-10-12: DC couldn't resolve names through its own resolver
 
 **Symptom:** `Test-NetConnection login.microsoftonline.com -Port 443`
@@ -86,8 +88,9 @@ records, while `nslookup` to the same server worked.
 
 **Root cause:** the DNS Client operational log showed every query going to `10.0.0.10`
 and getting no response ([screenshot](../screenshots/p2-sync/p2-dns-02-client-log.png)).
-A small test script sent the same UDP query to `10.0.0.10` from each local address:
+A small [test script](../scripts/Test-DnsSourceAddress.ps1) sent the same UDP query to `10.0.0.10` from each local address:
 from `10.0.0.10` it got a reply, from `10.0.2.15` it got nothing.
+
 
 Both adapters listed `10.0.0.10` as their DNS server, so the DNS Client sent the
 NAT adapter's queries from `10.0.2.15`, and those never got an answer.
