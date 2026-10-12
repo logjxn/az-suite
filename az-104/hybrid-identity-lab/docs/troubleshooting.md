@@ -68,7 +68,39 @@ Set-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\Wi
 
 **Verified after a reboot:** `HypervisorPresent` False, scenario still `0`, dreaded turtle gone.
 
-**Tradeoff:** Hello keys are still TPM-protected but no longer VBS-isolated. Temporary, for the lab.
+## 2026-10-12: DC couldn't resolve names through its own resolver
 
-**Lesson learned:** Learned about SkTool and how I should've run it first. Was guessing until I did, and it
-directed me to exactly what I needed to do.
+**Symptom:** `Test-NetConnection login.microsoftonline.com -Port 443`
+and `crl.microsoft.com -Port 80` both returned *Name resolution … failed*.
+Clearing the DNS client cache changed nothing unfortunately.
+([screenshot](../screenshots/p2-sync/p2-dns-01-resolution-failed.png))
+
+**Ruled out:**
+- Network: NAT had `10.0.2.15` and gateway `10.0.2.2`; a TCP test to `1.1.1.1:443` succeeded
+- DNS: `Resolve-DnsName -Server 1.1.1.1` worked
+- The DNS server: `-Server 10.0.0.10` answered a never-cached name in 0.07 s
+- `::1` in the client's DNS server list was not present
+
+What still failed: `Resolve-DnsName` with no `-Server` timed out, even for internal
+records, while `nslookup` to the same server worked.
+
+**Root cause:** the DNS Client operational log showed every query going to `10.0.0.10`
+and getting no response ([screenshot](../screenshots/p2-sync/p2-dns-02-client-log.png)).
+A small test script sent the same UDP query to `10.0.0.10` from each local address:
+from `10.0.0.10` it got a reply, from `10.0.2.15` it got nothing.
+
+Both adapters listed `10.0.0.10` as their DNS server, so the DNS Client sent the
+NAT adapter's queries from `10.0.2.15`, and those never got an answer.
+
+![Same query, two source addresses: only 10.0.0.10 gets a reply](../screenshots/p2-sync/p2-dns-03-source-harness.png)
+
+**Fix:**
+- NAT adapter: static `10.0.2.15/24`, gateway `10.0.2.2`, no DNS servers. Static because
+  DHCP would push VirtualBox's `10.0.2.3`, which doesn't know the lab's internal domain.
+- That exposed VirtualBox's IPv6 DNS proxy (`fd17:…::3`) on the NAT adapter,
+  so IPv6 was unbound from NAT too.
+
+**Verified after reboot:** both checks pass with source `10.0.2.15`, the SRV lookup
+answers through the resolver, and the zone still holds only `10.0.0.10` with no AAAA records.
+
+![Both connectivity checks passing after the fix](../screenshots/p2-sync/p2-dns-04-verified.png)
