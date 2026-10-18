@@ -19,8 +19,8 @@ with Entra Cloud Sync. Built phase by phase alongside AZ-104.
 |---|---|---|
 | [P1](docs/p1-onprem-ad.md) | On-prem AD: DC, DNS, UPN suffix, scripted users and groups | ✅ |
 | [P2](docs/p2-sync.md) | Sync to Entra ID with Cloud Sync | ✅ |
-| P3 | Azure governance: RG, tags, lock, RBAC, Policy | ⏳ next |
-| P4 | Python audit: Microsoft Graph + Azure RBAC report | |
+| P3 | Azure governance: RG, tags, lock, RBAC, Policy | ✅ |
+| P4 | Python audit: Microsoft Graph + Azure RBAC report | ⏳ next |
 | P5 | Source of authority: synced user → cloud-managed | |
 | P6 | Domain-joined Windows 11 client + Group Policy | |
 
@@ -39,3 +39,7 @@ Problems hit along the way and how they were fixed: [troubleshooting](docs/troub
 - **Password hash sync:** simplest sign-in method, works on Entra ID Free
 - **Agent on the DC:** supported by Microsoft, but it makes the DC a sync server too. In a real setup,
   this would be a dedicated hardened server. This is for lab purposes
+- **Roles to synced groups:** access follows on-prem group membership,
+  so joiners and leavers are handled in AD.
+- **Governance at resource-group scope:** the lock, the policy and the roles all apply to
+  `rg-hybrid-lab` only, so nothing else in the subscription is affected.

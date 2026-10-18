@@ -8,7 +8,7 @@ __pycache__/
 *.env
 
 # Unredacted script output (P4)
-output/raw/
+**/output/raw/
 
 # Windows clutter
 Thumbs.db
