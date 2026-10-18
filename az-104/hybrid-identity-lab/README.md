@@ -19,7 +19,7 @@ with Entra Cloud Sync. Built phase by phase alongside AZ-104.
 |---|---|---|
 | [P1](docs/p1-onprem-ad.md) | On-prem AD: DC, DNS, UPN suffix, scripted users and groups | ✅ |
 | [P2](docs/p2-sync.md) | Sync to Entra ID with Cloud Sync | ✅ |
-| P3 | Azure governance: RG, tags, lock, RBAC, Policy | ✅ |
+| [P3](docs/p3-governance.md) | Azure governance: RG, tags, lock, RBAC, Policy | ✅ |
 | P4 | Python audit: Microsoft Graph + Azure RBAC report | ⏳ next |
 | P5 | Source of authority: synced user → cloud-managed | |
 | P6 | Domain-joined Windows 11 client + Group Policy | |
