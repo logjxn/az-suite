@@ -1,7 +1,7 @@
 """Audits the lab: synced users and Azure RBAC
 
-Auth: borrows the Azure CLI sign-in through AzureCliCredential.
-No stored secrets.
+Auth: borrows the Azure CLI sign-in through AzureCliCredential
+No stored secrets
 
     az login --tenant <tenant>
     $env:AZURE_SUBSCRIPTION_ID = (az account show --query id -o tsv)
@@ -35,18 +35,18 @@ USER_FIELDS = (
 MEMBER_FIELDS = "displayName,userType,accountEnabled,onPremisesSyncEnabled,onPremisesDomainName"
 
 
-# --- Output -----------------------------------------------------------------
+# Output 
 
 _lines = []
 
 
 def out(text=""):
-    """Print a line and keep it for --save."""
+    """Print a line and keep it for --save"""
     print(text)
     _lines.append(text)
 
 
-# --- Auth helper ------------------------------------------------------------
+# Auth helper 
 
 credential = AzureCliCredential()
 _subscription_id = ""
@@ -57,7 +57,7 @@ class ApiError(Exception):
 
 
 def _redact(url):
-    """Hide the subscription ID if a URL ends up in an error message."""
+    """Hide the subscription ID if a URL ends up in an error message"""
     if _subscription_id:
         return url.replace(_subscription_id, "{subscription}")
     return url
@@ -71,7 +71,6 @@ def _check(resp, method, url):
         code, message = err.get("code", ""), err.get("message", "")
     except ValueError:
         code, message = "", resp.text[:200]
-    # ARM error messages can quote the scope path, so redact the whole text.
     raise ApiError(_redact(f"{method} {url}\n  HTTP {resp.status_code} {code}: {message}"))
 
 
@@ -92,7 +91,7 @@ def post(url, resource, body):
 
 
 def get_all(url, resource):
-    """GET every page. Graph uses @odata.nextLink, ARM uses nextLink."""
+    """GET every page"""
     items = []
     while url:
         page = get(url, resource)
@@ -101,7 +100,7 @@ def get_all(url, resource):
     return items
 
 
-# --- Subscription ID --------------------------------------------------------
+# Subscription ID 
 
 def read_subscription_id():
     value = os.environ.get("AZURE_SUBSCRIPTION_ID", "").strip()
@@ -117,14 +116,13 @@ def read_subscription_id():
     return value
 
 
-# --- Synced users -----------------------------------------------------------
+# Synced users 
 
 def list_users():
     return get_all(f"{GRAPH}/v1.0/users?$select={USER_FIELDS}", GRAPH)
 
 
 def report_synced_users(users):
-    # onPremisesSyncEnabled is null for cloud-only users, False if sync stopped.
     synced = [u for u in users if u.get("onPremisesSyncEnabled") is True]
     out(f"== Synced users ({len(synced)} of {len(users)} users in the tenant) ==")
     for u in sorted(synced, key=lambda u: u.get("displayName") or ""):
@@ -143,7 +141,7 @@ def report_synced_users(users):
     out()
 
 
-# --- RBAC report ------------------------------------------------------------
+# RBAC report
 
 def resolve_principals(ids):
     """Object ID -> directory object"""
@@ -164,7 +162,7 @@ def role_name(role_definition_id, rg_scope):
         except ApiError as e:
             if "HTTP 403" not in str(e):
                 raise
-            # Reader on the RG only: read the same role definition at RG scope.
+            # Reader on the RG only
             guid = role_definition_id.rstrip("/").split("/")[-1]
             url = f"{ARM}{rg_scope}/providers/Microsoft.Authorization/roleDefinitions/{guid}?api-version={ARM_API}"
             data = get(url, ARM)
@@ -220,7 +218,7 @@ def report_rbac(sub_id, users_by_id):
                 f"unknown {a.get('principalType', 'principal')} (deleted or not visible) → {role} → {where}"
             )
         elif kind == "#microsoft.graph.user":
-            # getByIds returns few user fields; use the /users data for sync status.
+            # getByIds returns few user fields, use the /users data for sync status
             user = users_by_id.get(obj["id"], obj)
             sections[section].append(f"{describe_user(user)} → {role} → {where}")
         elif kind == "#microsoft.graph.group":
@@ -256,7 +254,7 @@ def report_rbac(sub_id, users_by_id):
     out()
 
 
-# --- Main -------------------------------------------------------------------
+# Main 
 
 def main():
     global _subscription_id
@@ -264,7 +262,7 @@ def main():
     parser.add_argument("--save", metavar="PATH", help="also write the report to this file (UTF-8)")
     args = parser.parse_args()
 
-    # Windows consoles and redirects may not default to UTF-8; the report uses "→".
+    # Windows consoles and redirects may not default to UTF-8
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
