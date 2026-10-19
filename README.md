@@ -1,8 +1,8 @@
 # az-suite
 
-Hands-on Azure administration labs, built alongside Microsoft Learn's AZ-104 path.
-Each lab is documented with screenshots and scripts as it's built.
+Hands-on Azure administration labs, built alongside MS Learn's Azure cert paths.
+Each lab is documented with screenshots and scripts as built.
 
-| Lab | What it covers | Status |
-|---|---|---|
-| [hybrid-identity-lab](az-104/hybrid-identity-lab/) | On-prem Active Directory synced to Microsoft Entra ID with Cloud Sync | In Progress |
+| Lab | Cert | What it covers | Status |
+|---|---|---|---|
+| [hybrid-identity-lab](az-104/hybrid-identity-lab/) | AZ-104 | On-prem Active Directory synced to Microsoft Entra ID with Cloud Sync, plus RBAC, Azure Policy, and Python auditing | Complete |
