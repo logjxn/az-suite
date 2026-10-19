@@ -1,0 +1,46 @@
+== Synced users (4 of 6 users in the tenant) ==
+
+Goku Kakarot
+  accountEnabled               False
+  onPremisesSyncEnabled        True
+  onPremisesSamAccountName     gkakarot
+  onPremisesDomainName         lab.internal
+  onPremisesDistinguishedName  CN=Goku Kakarot,OU=Users,OU=Lab,DC=lab,DC=internal
+
+Jane Doe
+  accountEnabled               False
+  onPremisesSyncEnabled        True
+  onPremisesSamAccountName     jdoe
+  onPremisesDomainName         lab.internal
+  onPremisesDistinguishedName  CN=Jane Doe,OU=Users,OU=Lab,DC=lab,DC=internal
+
+Lee Gu
+  accountEnabled               False
+  onPremisesSyncEnabled        True
+  onPremisesSamAccountName     lgu
+  onPremisesDomainName         lab.internal
+  onPremisesDistinguishedName  CN=Lee Gu,OU=Users,OU=Lab,DC=lab,DC=internal
+
+SOA Test
+  accountEnabled               False
+  onPremisesSyncEnabled        True
+  onPremisesSamAccountName     soa.test
+  onPremisesDomainName         lab.internal
+  onPremisesDistinguishedName  CN=SOA Test,OU=Users,OU=Lab,DC=lab,DC=internal
+
+== RBAC on rg-hybrid-lab (4 role assignments) ==
+
+-- Assigned at rg-hybrid-lab --
+  Goku Kakarot (synced from lab.internal) [disabled] → Reader via GG-Lab-Readers → rg-hybrid-lab
+  Jane Doe (synced from lab.internal) [disabled] → Reader via GG-Lab-Readers → rg-hybrid-lab
+  Lee Gu (synced from lab.internal) [disabled] → Reader via GG-Lab-Readers → rg-hybrid-lab
+  hiadmin (cloud-only) → Reader → rg-hybrid-lab
+
+-- Inherited from above (applies to the RG too) --
+  Azure Labbing (cloud-only) → Owner → subscription
+
+-- Assigned on resources inside rg-hybrid-lab --
+  Goku Kakarot (synced from lab.internal) [disabled] → Storage Blob Data Reader via GG-Lab-Readers → rg-hybrid-lab/labstoragetestin
+  Jane Doe (synced from lab.internal) [disabled] → Storage Blob Data Reader via GG-Lab-Readers → rg-hybrid-lab/labstoragetestin
+  Lee Gu (synced from lab.internal) [disabled] → Storage Blob Data Reader via GG-Lab-Readers → rg-hybrid-lab/labstoragetestin
+

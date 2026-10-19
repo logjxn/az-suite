@@ -20,9 +20,7 @@ with Entra Cloud Sync. Built phase by phase alongside AZ-104.
 | [P1](docs/p1-onprem-ad.md) | On-prem AD: DC, DNS, UPN suffix, scripted users and groups | ✅ |
 | [P2](docs/p2-sync.md) | Sync to Entra ID with Cloud Sync | ✅ |
 | [P3](docs/p3-governance.md) | Azure governance: RG, tags, lock, RBAC, Policy | ✅ |
-| P4 | Python audit: Microsoft Graph + Azure RBAC report | ⏳ next |
-| P5 | Source of authority: synced user → cloud-managed | |
-| P6 | Domain-joined Windows 11 client + Group Policy | |
+| [P4](docs/p4-python-audit.md) | Python audit: Microsoft Graph + Azure RBAC report | ✅ |
 
 Problems hit along the way and how they were fixed: [troubleshooting](docs/troubleshooting.md)
 
@@ -33,7 +31,8 @@ Problems hit along the way and how they were fixed: [troubleshooting](docs/troub
 - **No purchased domain:** the tenant's `onmicrosoft.com` domain is already verified
 - **NAT + internal network, no Bridged:** the lab is never reachable from the home network
 - **Cloud-only `hiadmin` for sync admin:** Hybrid Identity Administrator that doesn't depend on
-  on-prem AD, so sync stays manageable if my DC breaks. The signup account is a guest-type user and can't run setup
+  on-prem AD, so sync stays manageable if my DC breaks. The signup account is an external Microsoft account and
+  can’t run setup.
 - **Sync scoped to `OU=Lab`, delete threshold 3:** only lab objects leave the domain, and the default
   of 500 would never trip at this scale
 - **Password hash sync:** simplest sign-in method, works on Entra ID Free
@@ -43,3 +42,5 @@ Problems hit along the way and how they were fixed: [troubleshooting](docs/troub
   so joiners and leavers are handled in AD.
 - **Governance at resource-group scope:** the lock, the policy and the roles all apply to
   `rg-hybrid-lab` only, so nothing else in the subscription is affected.
+- **No secrets in the audit script:** it signs in with `AzureCliCredential`, which borrows the
+  `az login` session, so no app registration or client secret exists.

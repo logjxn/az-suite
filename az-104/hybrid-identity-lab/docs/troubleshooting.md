@@ -107,3 +107,24 @@ NAT adapter's queries from `10.0.2.15`, and those never got an answer.
 answers through the resolver, and the zone still holds only `10.0.0.10` with no AAAA records.
 
 ![Both connectivity checks passing after the fix](../screenshots/p2-sync/p2-dns-04-verified.png)
+
+## 2026-10-19: Synced group shows no members in Entra
+
+**Symptom:** The P4 audit listed `GG-Lab-Readers` with `(no members)` on both role
+assignments. In AD, the group has 3 members.
+
+**Ruled out:**
+- The script: `az ad group member list --group GG-Lab-Readers` (same CLI sign-in) also
+  returned nothing.
+- Disabled accounts: disabled users keep their group memberships, and the members'
+  disabled state had synced to Entra normally on Oct 12.
+
+**Cause:** The Cloud Sync configuration for `lab.internal` was quarantined. The DC was
+off between phases, so the agent couldn't reach the domain, and the job stopped exporting.
+
+**Fix:** Started the DC, confirmed the agent was active, and used **Restart provisioning**
+on the configuration (no reset). Provision on demand for `jdoe` confirmed the agent could
+read the domain again.
+
+**Verified:** After the next sync cycle, `az ad group member list` and the audit both
+show 3 members.
