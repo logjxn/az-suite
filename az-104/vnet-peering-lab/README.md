@@ -33,11 +33,11 @@ Problems hit along the way: [troubleshooting](docs/troubleshooting.md)
 
 ## Design choices
 
-- **Private subnets, no public IPs:** nothing is reachable from the internet, and it matches
+- **Private subnets:** nothing is reachable from the internet, and it matches
   the default for new VNets
 - **Run Command:** no inbound ports at all
 - **`python3 -m http.server` instead of nginx:** with no outbound access, `apt` can't install packages;
   Python ships with Ubuntu
-- **NSGs on subnets, not NICs (`--nsg ""`):** one NSG per subnet to manage
-- **CLI-only screenshots with `--query`:** shorter output and no resource IDs, which contain
+- **NSGs on subnets (`--nsg ""`):** one NSG per subnet to manage
+- **CLI-only screenshots via `--query`:** shorter output and no resource IDs, which contain
   the subscription ID
