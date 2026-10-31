@@ -30,17 +30,11 @@ Problems hit along the way and how they were fixed: [troubleshooting](docs/troub
 - **`lab.internal`, not `.local`:** `.internal` is reserved for private use; `.local` clashes with mDNS
 - **No purchased domain:** the tenant's `onmicrosoft.com` domain is already verified
 - **NAT + internal network, no Bridged:** the lab is never reachable from the home network
-- **Cloud-only `hiadmin` for sync admin:** Hybrid Identity Administrator that doesn't depend on
-  on-prem AD, so sync stays manageable if my DC breaks. The signup account is an external Microsoft account and
-  can’t run setup.
-- **Sync scoped to `OU=Lab`, delete threshold 3:** only lab objects leave the domain, and the default
-  of 500 would never trip at this scale
-- **Password hash sync:** simplest sign-in method, works on Entra ID Free
-- **Agent on the DC:** supported by Microsoft, but it makes the DC a sync server too. In a real setup,
-  this would be a dedicated hardened server. This is for lab purposes
+- **Cloud-only `hiadmin` for sync admin:** Hybrid Identity Administrator that doesn't depend on on-prem AD, so sync stays manageable if my DC breaks
+- **Sync scope and delete threshold:** limited to `OU=Lab`, with a threshold of 3 to catch unexpected deletions at this lab's scale
+- **Password hash sync:** simple sign-in method, works on Entra ID Free
+- **Agent on the DC:** supported, but a production deployment should use a dedicated hardened server
 - **Roles to synced groups:** access follows on-prem group membership,
   so joiners and leavers are handled in AD.
-- **Governance at resource-group scope:** the lock, the policy and the roles all apply to
-  `rg-hybrid-lab` only, so nothing else in the subscription is affected.
-- **No secrets in the audit script:** it signs in with `AzureCliCredential`, which borrows the
-  `az login` session, so no app registration or client secret exists.
+- **Governance at resource-group scope:** the lock, policy and role assignments all apply to `rg-hybrid-lab` only, so nothing else in the subscription is affected
+- **No secrets in the audit script:** uses `AzureCliCredential` and the existing `az login` session; no app registration or client secret
