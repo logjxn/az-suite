@@ -1,15 +1,15 @@
 # P3: Azure Governance
 
 **Goal:** a resource group with tags, a lock for deletion, group-based RBAC for the synced group,
-and a tag policy, all at the resource-group scope.
+and a tag policy, all at RG scope.
 
 ## What was built
 
 1. **Spending guardrails**: free-account spending limit on, plus a $5 monthly budget with alerts.
 2. **`rg-hybrid-lab`** with tags `env=lab` and `project=hybrid-identity`.
-3. **`CanNotDelete` lock** on the resource group. A delete attempt is refused.
+3. **`CanNotDelete` lock** on the resource group.
 4. **Reader for `GG-Lab-Readers`**, the group synced from on-prem AD. Access follows
-   on-prem group membership.
+   on-prem group.
 5. **Azure Policy "Require a tag on resources"** (`env`), assigned to the resource group.
 6. **Storage account + Storage Blob Data Reader** for the same group (data-plane access).
 
@@ -23,7 +23,7 @@ The storage account shows both kinds of access for the same group:
 
 ![Inherited Reader and Storage Blob Data Reader](../screenshots/p3-governance/p3-05-storage-iam.png)
 
-## Verify
+## My checks
 
 - Resource group tags ([screenshot](../screenshots/p3-governance/p3-02a-rg-tags.png))
   and lock ([screenshot](../screenshots/p3-governance/p3-02b-rg-lock.png))
