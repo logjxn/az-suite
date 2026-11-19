@@ -8,13 +8,13 @@
    (lab traffic only). See [setup](../README.md#setup).
 2. **Windows Server 2022, Desktop Experience.** 
 3. **Static IP** `10.0.0.10` on `labnet`. There's no DHCP on the lab network.
-4. **TLS 1.2 enforced** in the registry, a Cloud Sync agent requirement.
-5. **Promoted to a new forest**, `lab.internal`, with AD-integrated DNS and
+4. **TLS 1.2 enforced** in the registry. Cloud Sync agent requirement.
+5. **Promoted to a new forest**, `lab.internal`, with AD integrated DNS and
    forwarders to `1.1.1.1` and `8.8.8.8`.
-6. **Fixed DNS for a two-NIC DC** so only the lab address is published.
+6. **Fixed DNS for a two-NIC DC** only the lab address is published.
    See [troubleshooting](troubleshooting.md).
 7. **Added the UPN suffix** `<tenant>.onmicrosoft.com` before creating any users,
-   so on-prem and cloud sign-in names match.
+   meaning on-prem and cloud sign-in names match.
 8. **Scripted OUs, users and groups** with [`New-LabUsers.ps1`](../scripts/New-LabUsers.ps1).
 
 ![Server Manager: AD DS and DNS roles](../screenshots/p1-onprem-ad/p1-01-server-manager-roles.png)
@@ -28,16 +28,16 @@ Get-Help .\New-LabUsers.ps1 -Full
 ```
 
 Creates `Lab` → `Users` / `Groups` / `Computers`, four users and `GG-Lab-Readers`.
-Prompts for the password and stores nothing. Safe to rerun: the second run skips everything.
+Prompts for the password and stores nothing. Re-runnable, as the 2nd run skips.
 
 ![First run creates, second run skips](../screenshots/p1-onprem-ad/p1-05-aduc-ous.png)
 
-## Verify
+## My Checks
 
 ```powershell
 nslookup lab.internal          # only 10.0.0.10
 Get-ADUser -Filter * -SearchBase "OU=Users,OU=Lab,DC=lab,DC=internal" |
-    Select Name, UserPrincipalName   # every UPN ends in the onmicrosoft.com suffix
+    Select Name, UserPrincipalName   # every UPN ends in the onmicrosoft.com
 ```
 
 ## Snapshots
