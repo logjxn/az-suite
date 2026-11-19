@@ -26,15 +26,12 @@ Problems hit along the way and how they were fixed: [troubleshooting](docs/troub
 
 ## Design choices
 
-- **Cloud Sync, not Connect Sync:** lighter agent, auto-updates, config lives in the cloud
-- **`lab.internal`, not `.local`:** `.internal` is reserved for private use; `.local` clashes with mDNS
+- **Cloud Sync:** lighter agent, auto-updates, config lives in the cloud
 - **No purchased domain:** the tenant's `onmicrosoft.com` domain is already verified
 - **NAT + internal network, no Bridged:** the lab is never reachable from the home network
 - **Cloud-only `hiadmin` for sync admin:** Hybrid Identity Administrator that doesn't depend on on-prem AD, so sync stays manageable if my DC breaks
 - **Sync scope and delete threshold:** limited to `OU=Lab`, with a threshold of 3 to catch unexpected deletions at this lab's scale
 - **Password hash sync:** simple sign-in method, works on Entra ID Free
-- **Agent on the DC:** supported, but a production deployment should use a dedicated hardened server
-- **Roles to synced groups:** access follows on-prem group membership,
-  so joiners and leavers are handled in AD.
+- **Roles to synced groups:** access follows on-prem group membership, so joiners and leavers are handled in AD.
 - **Governance at resource-group scope:** the lock, policy and role assignments all apply to `rg-hybrid-lab` only, so nothing else in the subscription is affected
 - **No secrets in the audit script:** uses `AzureCliCredential` and the existing `az login` session; no app registration or client secret
