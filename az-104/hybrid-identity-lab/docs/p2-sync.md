@@ -4,12 +4,12 @@
 
 ## What was built
 
-1. **Checked the tenant**: primary domain is the `onmicrosoft.com` domain used as the P1 UPN suffix.
+1. **Checked the tenant**: primary domain is the `onmicrosoft.com` domain.
 2. **Cloud-only `hiadmin`** with the Hybrid Identity Administrator role and MFA (Authenticator).
 3. **Fixed DC name resolution** before installing anything. The agent needs outbound DNS,
    and the DC's own resolver was failing. See [troubleshooting](troubleshooting.md).
 4. **KDS root key** so the agent can run as a gMSA.
-5. **Cloud Sync provisioning agent** installed on DC01, showing Active in the portal.
+5. **Cloud Sync provisioning agent** installed on DC01, and showing Active in the portal.
 6. **Sync configuration** for `lab.internal`: password hash sync on, scoped to `OU=Lab`
    (users and `GG-Lab-Readers`).
 
@@ -21,7 +21,7 @@
 ![Scoped to OU=Lab](../screenshots/p2-sync/p2-05b-scoping-ou.png)
 ![Accidental-delete threshold 3](../screenshots/p2-sync/p2-05c-accidental-delete.png)
 
-## Verify
+## My checks
 
 - Entra ID → Users: the lab users show **On-premises sync enabled: Yes**
   ([screenshot](../screenshots/p2-sync/p2-07-source-windows-ad.png))
@@ -31,7 +31,7 @@
   ([screenshot](../screenshots/p2-sync/p2-09-test-signin.png))
 
 
-On the DC:
+DC:
 ```powershell
     Get-Service AADConnectProvisioningAgent      # Running (delayed start, give like 2 min)
     Get-ADServiceAccount -Filter "Name -like 'pGMSA_*'"  # the agent's gMSA
