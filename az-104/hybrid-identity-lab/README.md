@@ -11,7 +11,7 @@ with Entra Cloud Sync. Built phase by phase alongside AZ-104.
 | Forest / domain | `lab.internal` |
 | UPN suffix | the tenant's `onmicrosoft.com` domain |
 | Lab network | VirtualBox Internal Network `labnet`, `10.0.0.0/24` |
-| Internet | Separate NAT adapter, outbound only: static `10.0.2.15`, no DNS servers, IPv4 only ([why](docs/troubleshooting.md)). No Bridged networking |
+| Internet | Outbound only, no DNS servers, IPv4 only. No Bridged networking |
 
 ## Phases
 
@@ -28,10 +28,10 @@ Problems hit along the way and how they were fixed: [troubleshooting](docs/troub
 
 - **Cloud Sync:** lighter agent, auto-updates, config lives in the cloud
 - **No purchased domain:** the tenant's `onmicrosoft.com` domain is already verified
-- **NAT + internal network, no Bridged:** the lab is never reachable from the home network
-- **Cloud-only `hiadmin` for sync admin:** Hybrid Identity Administrator that doesn't depend on on-prem AD, so sync stays manageable if my DC breaks
+- **NAT + internal network:** the lab is never reachable from the home network
+- **Cloud-only `hiadmin`:** Hybrid Identity Administrator that doesn't depend on on-prem AD, so sync stays manageable if my DC breaks
 - **Sync scope and delete threshold:** limited to `OU=Lab`, with a threshold of 3 to catch unexpected deletions at this lab's scale
 - **Password hash sync:** simple sign-in method, works on Entra ID Free
 - **Roles to synced groups:** access follows on-prem group membership, so joiners and leavers are handled in AD.
-- **Governance at resource-group scope:** the lock, policy and role assignments all apply to `rg-hybrid-lab` only, so nothing else in the subscription is affected
+- **Governance at rg scope:** the lock, policy and role assignments all apply to `rg-hybrid-lab` only, so nothing else in the subscription is affected
 - **No secrets in the audit script:** uses `AzureCliCredential` and the existing `az login` session; no app registration or client secret
