@@ -44,7 +44,6 @@ Clearing the DNS client cache changed nothing unfortunately.
 
 **Cause:** the DNS Client operational log showed every query going to `10.0.0.10`
 and getting no response ([screenshot](../screenshots/p2-sync/p2-dns-02-client-log.png)).
-A small [test script](../scripts/Test-DnsSourceAddress.ps1) sent the same UDP query to `10.0.0.10` from each local address. Both adapters used 10.0.0.10 for DNS, but queries originating from the NAT address received no response.
 
 ![Same query, two source addresses: only 10.0.0.10 gets a reply](../screenshots/p2-sync/p2-dns-03-source-harness.png)
 
