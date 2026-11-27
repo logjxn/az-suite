@@ -1,7 +1,7 @@
 # VNet Peering Lab
 
 Two VNets with a Linux VM in each, no public IPs, built in one session in
-Azure Cloud Shell using bash, alongside AZ-104 Learn. Shows how routing changes when VNets are
+Azure Cloud Shell using bash. Shows how routing changes when VNets are
 peered, and how an NSG rule blocks traffic that peering allows.
 
 ## Setup
@@ -31,11 +31,8 @@ Problems hit along the way: [troubleshooting](docs/troubleshooting.md)
 
 ## Design choices
 
-- **Private subnets:** nothing is reachable from the internet, and it matches
-  the default for new VNets
-- **Run Command:** no inbound ports at all
-- **`python3 -m http.server` instead of nginx:** with no outbound access, `apt` can't install packages;
+- Chose private subnets, so nothing is reachable from the internet. 
+- Used Run Command, no inbound ports at all
+- Set-up `python3 -m http.server` instead of nginx. Without outbound access, `apt` can't install packages, but
   Python ships with Ubuntu
-- **NSGs on subnets (`--nsg ""`):** one NSG per subnet to manage
-- **CLI-only screenshots via `--query`:** shorter output and no resource IDs, which contain
-  the subscription ID
+- Set-up NSGs on subnets. One NSG per subnet to manage
