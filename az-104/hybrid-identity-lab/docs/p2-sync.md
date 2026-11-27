@@ -6,8 +6,7 @@
 
 1. **Checked the tenant**: primary domain is the `onmicrosoft.com` domain.
 2. **Cloud-only `hiadmin`** with the Hybrid Identity Administrator role and MFA (Authenticator).
-3. **Fixed DC name resolution** before installing anything. The agent needs outbound DNS,
-   and the DC's own resolver was failing. See [troubleshooting](troubleshooting.md).
+3. **Fixed DC name resolution** before installing anything. Agent needs outbound DNS.
 4. **KDS root key** so the agent can run as a gMSA.
 5. **Cloud Sync provisioning agent** installed on DC01, and showing Active in the portal.
 6. **Sync configuration** for `lab.internal`: password hash sync on, scoped to `OU=Lab`
