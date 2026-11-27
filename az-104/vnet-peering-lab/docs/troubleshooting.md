@@ -1,8 +1,6 @@
 ## 2026-10-24: VM sizes not available for this subscription
 
 **Issue:** `az vm create` failed with `SkuNotAvailable` in `eastus` for multiple SKUs.
-The CLI crashed while formatting the error, so the real message was buried
-in a traceback.
 
 **Cause:** subscription-level restriction.
 `az vm list-skus --all` showed every B-series size as `NotAvailableForSubscription` in my region.
