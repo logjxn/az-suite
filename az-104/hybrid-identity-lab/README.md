@@ -22,16 +22,14 @@ with Entra Cloud Sync. Built phase by phase alongside AZ-104.
 | [P3](docs/p3-governance.md) | Azure governance: RG, tags, lock, RBAC, Policy | ✅ |
 | [P4](docs/p4-python-audit.md) | Python audit: Microsoft Graph + Azure RBAC report | ✅ |
 
-Problems hit along the way and how they were fixed: [troubleshooting](docs/troubleshooting.md)
-
 ## Design choices
 
-- **Cloud Sync:** lighter agent, auto-updates, config lives in the cloud
+- **Cloud Sync:** ran as a lighter agent, auto-updates, and its config lives in the cloud
 - **No purchased domain:** the tenant's `onmicrosoft.com` domain is already verified
 - **NAT + internal network:** the lab is never reachable from the home network
 - **Cloud-only `hiadmin`:** Hybrid Identity Administrator that doesn't depend on on-prem AD, so sync stays manageable if my DC breaks
-- **Sync scope and delete threshold:** limited to `OU=Lab`, with a threshold of 3 to catch unexpected deletions at this lab's scale
+- **Sync scope and delete threshold:** limited to the lab OU, with a threshold of 3 to catch unexpected deletions at this lab's scale
 - **Password hash sync:** simple sign-in method, works on Entra ID Free
 - **Roles to synced groups:** access follows on-prem group membership, so joiners and leavers are handled in AD.
 - **Governance at rg scope:** the lock, policy and role assignments all apply to `rg-hybrid-lab` only, so nothing else in the subscription is affected
-- **No secrets in the audit script:** uses `AzureCliCredential` and the existing `az login` session; no app registration or client secret
+- **No secrets in the audit script:** uses `AzureCliCredential` and the existing `az login` session
