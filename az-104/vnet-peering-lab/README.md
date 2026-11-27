@@ -27,8 +27,6 @@ peered, and how an NSG rule blocks traffic that peering allows.
 | 6 | Peer both directions | `Connected`, curl works, `10.20.0.0/16` → `VNetPeering` | [06a](screenshots/06a-peering-connected.png), [06b](screenshots/06b-curl-ok.png), [06c](screenshots/06c-routes-after.png) |
 | 7 | NSG deny on port 80 from snet-web | curl fails, IP flow verify: `Deny` by `deny-web-http` | [07a](screenshots/07a-nsg-deny-rule.png), [07b](screenshots/07b-ip-flow-verify.png) |
 
-Build commands: [scripts/build-lab.sh](scripts/build-lab.sh).
-Teardown: [scripts/teardown-lab.sh](scripts/teardown-lab.sh).
 Problems hit along the way: [troubleshooting](docs/troubleshooting.md)
 
 ## Design choices
