@@ -6,9 +6,9 @@ peered, and how an NSG rule blocks traffic that peering allows.
 
 ## Setup
 
-| | |
+| Aspect | Decision |
 |---|---|
-| Region | `westus2` [why](docs/troubleshooting.md) |
+| Region | `westus2` |
 | vnet-web | `10.10.0.0/16`, subnet `snet-web` `10.10.1.0/24`, `vm-web` at `10.10.1.4` |
 | vnet-app | `10.20.0.0/16`, subnet `snet-app` `10.20.1.0/24`, `vm-app` at `10.20.1.4` |
 | VMs | `Standard_B2ats_v2`, Ubuntu 24.04 |
